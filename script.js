@@ -60,16 +60,19 @@ document.addEventListener("DOMContentLoaded", function () {
             );
         });
     }
+// Function to reset the game
+function resetGame() {
+    // Clear the game board and reset current player to "X"
+    gameBoard = ["", "", "", "", "", "", "", "", ""];
+    currentPlayer = "X";
 
-    // Function to reset the game
-    function resetGame() {
-        // Clear the game board and reset current player to "X"
-        gameBoard = ["", "", "", "", "", "", "", "", ""];
-        currentPlayer = "X";
+    // Clear the content of each cell
+    cells.forEach((cell) => {
+        cell.textContent = "";
+    });
 
-        // Clear the content of each cell
-        cells.forEach((cell) => {
-            cell.textContent = "";
-        });
-    }
+    // Clear the game result message
+    gameResult.textContent = "";
+}
+
 });
