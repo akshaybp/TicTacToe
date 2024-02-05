@@ -4,7 +4,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #0c0c0c; /* Dark background color */
+    background: url('avengers_bg.jpg') center/cover; /* Avengers-themed background */
     color: #fff; /* White text color */
     font-family: 'Roboto', sans-serif; /* Use a modern sans-serif font */
 }
@@ -17,14 +17,18 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 100px);
     gap: 10px;
+    border: 4px solid #ef6c00; /* Orange border around the game board */
+    border-radius: 10px; /* Rounded corners for the game board */
+    overflow: hidden; /* Ensure the rounded corners are visible */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Subtle box shadow for depth */
 }
 
 .cell {
     position: relative;
     width: 100px;
     height: 100px;
-    background-color: #e62429; /* Red cell background color */
-    border: 2px solid #8a171d; /* Darker red cell border */
+    background-color: #3f51b5; /* Dark blue cell background color */
+    border: 2px solid #1a237e; /* Darker blue cell border */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -35,23 +39,15 @@ body {
 }
 
 .cell:hover {
-    background-color: #8a171d; /* Darker red on hover */
+    background-color: #1a237e; /* Darker blue on hover */
     transform: scale(1.05); /* Scale up slightly on hover for a subtle effect */
-}
-
-/* Styling for the game board */
-#game-board {
-    border: 4px solid #8a171d; /* Darker red border around the game board */
-    border-radius: 10px; /* Rounded corners for the game board */
-    overflow: hidden; /* Ensure the rounded corners are visible */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Subtle box shadow for depth */
 }
 
 /* Styling for the game title */
 .game-title {
     font-size: 36px;
     margin-bottom: 20px;
-    color: #e62429; /* Red color for the title */
+    color: #ef6c00; /* Orange color for the title */
 }
 
 /* Styling for the "Play Again" button */
@@ -63,7 +59,7 @@ body {
 button {
     padding: 10px 20px;
     font-size: 18px;
-    background-color: #e62429; /* Red button background color */
+    background-color: #ef6c00; /* Orange button background color */
     color: #fff; /* White text color */
     border: none;
     cursor: pointer;
@@ -71,14 +67,14 @@ button {
 }
 
 button:hover {
-    background-color: #99171d; /* Darker red on hover */
+    background-color: #bf360c; /* Darker orange on hover */
 }
 
 /* Styling for the game result message */
 #game-result {
     font-size: 24px;
     margin-top: 20px;
-    color: #e62429; /* Red color for the result message */
+    color: #ef6c00; /* Orange color for the result message */
 }
 
 /* Styling for X and O */
@@ -86,21 +82,16 @@ button:hover {
 .cell.O::before {
     content: '';
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 40px;
-    color: #e62429; /* Red color for X and O */
+    width: 80px;
+    height: 80px;
+    background-size: cover;
     border-radius: 50%;
 }
 
 .cell.X::before {
-    content: 'X';
+    background: radial-gradient(circle at 20% 40%, #ffcc00 60%, transparent 70%); /* Creative Iron Man-style gradient */
 }
 
 .cell.O::before {
-    content: 'O';
+    background: linear-gradient(45deg, transparent 45%, #e62429 45%, #e62429 55%, transparent 55%, transparent); /* Creative Captain America-style gradient */
 }
