@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Tic Tac Toe</title>
+    <title>Tic Tac Toe Game</title>
 </head>
 <body>
-    <!-- Game board container -->
+    <h1 class="game-title">Tic Tac Toe</h1>
     <div id="game-board">
         <!-- Individual cells of the game board -->
         <div class="cell" data-index="0"></div>
@@ -20,7 +20,10 @@
         <div class="cell" data-index="7"></div>
         <div class="cell" data-index="8"></div>
     </div>
-    <!-- JavaScript file for game logic -->
+    <div id="game-result"></div>
+    <div class="button-container">
+        <button onclick="resetGame()">Play Again</button>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
