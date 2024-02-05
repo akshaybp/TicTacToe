@@ -4,7 +4,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background: url('avengers_bg.jpg') center/cover; /* Avengers-themed background */
+    background-color: #1a1a1a; /* Dark background color */
     color: #fff; /* White text color */
     font-family: 'Roboto', sans-serif; /* Use a modern sans-serif font */
 }
@@ -82,16 +82,17 @@ button:hover {
 .cell.O::before {
     content: '';
     position: absolute;
-    width: 80px;
-    height: 80px;
-    background-size: cover;
-    border-radius: 50%;
+    width: 0;
+    height: 0;
+    border-style: solid;
 }
 
 .cell.X::before {
-    background: radial-gradient(circle at 20% 40%, #ffcc00 60%, transparent 70%); /* Creative Iron Man-style gradient */
+    border-width: 15px 25px 15px 0;
+    border-color: transparent #ffcc00 transparent transparent; /* Gold color for X */
 }
 
 .cell.O::before {
-    background: linear-gradient(45deg, transparent 45%, #e62429 45%, #e62429 55%, transparent 55%, transparent); /* Creative Captain America-style gradient */
+    border-width: 15px;
+    border-color: transparent transparent transparent #ffcc00; /* Gold color for O */
 }
