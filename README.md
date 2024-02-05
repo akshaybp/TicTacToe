@@ -26,7 +26,7 @@ This project is a basic implementation of the Tic Tac Toe game using HTML, CSS, 
 
 ## Demo
 
-[Link to Demo](#) https://akshaybp.github.io/TicTacToe/
+https://akshaybp.github.io/TicTacToe/
 
 ## Getting Started
 
