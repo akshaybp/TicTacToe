@@ -4,9 +4,9 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f7f7f7; /* Light gray background color */
-    color: #333; /* Dark text color */
-    font-family: 'Poppins', sans-serif; /* Use a modern sans-serif font */
+    background-color: #0c0c0c; /* Dark background color */
+    color: #fff; /* White text color */
+    font-family: 'Roboto', sans-serif; /* Use a modern sans-serif font */
 }
 
 .container {
@@ -20,10 +20,11 @@ body {
 }
 
 .cell {
+    position: relative;
     width: 100px;
     height: 100px;
-    background-color: #61dafb; /* Sky blue cell background color */
-    border: 2px solid #3498db; /* Dodger blue cell border */
+    background-color: #e62429; /* Red cell background color */
+    border: 2px solid #8a171d; /* Darker red cell border */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -34,13 +35,13 @@ body {
 }
 
 .cell:hover {
-    background-color: #4183c4; /* Slightly darker blue on hover */
+    background-color: #8a171d; /* Darker red on hover */
     transform: scale(1.05); /* Scale up slightly on hover for a subtle effect */
 }
 
 /* Styling for the game board */
 #game-board {
-    border: 4px solid #3498db; /* Dodger blue border around the game board */
+    border: 4px solid #8a171d; /* Darker red border around the game board */
     border-radius: 10px; /* Rounded corners for the game board */
     overflow: hidden; /* Ensure the rounded corners are visible */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Subtle box shadow for depth */
@@ -50,7 +51,7 @@ body {
 .game-title {
     font-size: 36px;
     margin-bottom: 20px;
-    color: #3498db; /* Dodger blue color for the title */
+    color: #e62429; /* Red color for the title */
 }
 
 /* Styling for the "Play Again" button */
@@ -62,7 +63,7 @@ body {
 button {
     padding: 10px 20px;
     font-size: 18px;
-    background-color: #3498db; /* Dodger blue button background color */
+    background-color: #e62429; /* Red button background color */
     color: #fff; /* White text color */
     border: none;
     cursor: pointer;
@@ -70,21 +71,36 @@ button {
 }
 
 button:hover {
-    background-color: #2079b0; /* Darker blue on hover */
+    background-color: #99171d; /* Darker red on hover */
 }
 
 /* Styling for the game result message */
 #game-result {
     font-size: 24px;
     margin-top: 20px;
-    color: #3498db; /* Dodger blue color for the result message */
+    color: #e62429; /* Red color for the result message */
 }
 
 /* Styling for X and O */
-.cell.X {
-    color: #e74c3c; /* Alizarin color for X */
+.cell.X::before,
+.cell.O::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: #e62429; /* Red color for X and O */
+    border-radius: 50%;
 }
 
-.cell.O {
-    color: #27ae60; /* Emerald color for O */
+.cell.X::before {
+    content: 'X';
+}
+
+.cell.O::before {
+    content: 'O';
 }
