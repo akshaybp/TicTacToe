@@ -6,6 +6,7 @@ A simple implementation of the classic Tic Tac Toe game for a static website.
 
 - [Introduction](#introduction)
 - [Features](#features)
+- [Demo](#demo)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -22,6 +23,10 @@ This project is a basic implementation of the Tic Tac Toe game using HTML, CSS, 
 - Responsive game board layout.
 - Player vs Player mode.
 - Win and tie detection.
+
+## Demo
+
+[Link to Demo](#) https://akshaybp.github.io/TicTacToe/
 
 ## Getting Started
 
