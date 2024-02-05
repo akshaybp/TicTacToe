@@ -26,11 +26,12 @@ body {
     font-size: 24px;
     cursor: pointer;
     color: #fff; /* White text color */
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.1s;
 }
 
 .cell:hover {
     background-color: #526687; /* Slightly darker blue on hover */
+    transform: scale(1.05); /* Scale up slightly on hover for a subtle effect */
 }
 
 /* Styling for the game board */
@@ -41,18 +42,30 @@ body {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Subtle box shadow for depth */
 }
 
-/* Styling for the game result message */
-#game-result {
-    font-size: 24px;
+/* Styling for the game title */
+.game-title {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #f9a828; /* Golden yellow color for the title */
+}
+
+/* Styling for the "Play Again" button */
+.button-container {
+    text-align: center;
     margin-top: 20px;
 }
 
-/* Add some animation for a smoother hover effect */
-.cell {
-    transition: background-color 0.3s, transform 0.1s;
+button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #f9a828; /* Golden yellow button background color */
+    color: #fff; /* White text color */
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.cell:hover {
-    background-color: #526687; /* Slightly darker blue on hover */
-    transform: scale(1.05); /* Scale up slightly on hover for a subtle effect */
+button:hover {
+    background-color: #d88c16; /* Darker yellow on hover */
 }
