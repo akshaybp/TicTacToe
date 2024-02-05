@@ -1,78 +1,74 @@
-// Wait for the HTML content to be fully loaded
-document.addEventListener("DOMContentLoaded", function () {
-    // Select all cells on the game board
-    const cells = document.querySelectorAll(".cell");
-    // Initialize current player as "X"
-    let currentPlayer = "X";
-    // Initialize game board array to track moves
-    let gameBoard = ["", "", "", "", "", "", "", "", ""];
+// Variables to track game state
+let gameBoard = ["", "", "", "", "", "", "", "", ""];
+let currentPlayer = "X";
+let gameResult = document.getElementById("game-result");
+const cells = document.querySelectorAll(".cell");
 
-    // Add click event listener to each cell
-    cells.forEach((cell) => {
-        cell.addEventListener("click", handleClick);
-    });
+// Function to check for a winner
+function checkWinner() {
+    const winPatterns = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+        [0, 4, 8], [2, 4, 6]             // Diagonals
+    ];
 
-    // Function to handle cell click
-    function handleClick(event) {
-        // Get the index of the clicked cell from the data attribute
-        const index = event.target.dataset.index;
-
-        // Check if the selected cell is empty
-        if (gameBoard[index] === "") {
-            // Update game board and display the current player's symbol
-            gameBoard[index] = currentPlayer;
-            event.target.textContent = currentPlayer;
-
-            // Check for a winner or a tie
-            if (checkWinner()) {
-                alert(`${currentPlayer} wins!`);
-                resetGame();
-            } else if (gameBoard.every((cell) => cell !== "")) {
-                alert("It's a tie!");
-                resetGame();
-            } else {
-                // Switch to the next player
-                currentPlayer = currentPlayer === "X" ? "O" : "X";
-            }
+    for (const pattern of winPatterns) {
+        const [a, b, c] = pattern;
+        if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+            return gameBoard[a]; // Return the winner (X or O)
         }
     }
 
-    // Function to check for a winner
-    function checkWinner() {
-        const winPatterns = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6],
-        ];
-
-        // Check each winning pattern
-        return winPatterns.some((pattern) => {
-            const [a, b, c] = pattern;
-            return (
-                gameBoard[a] !== "" &&
-                gameBoard[a] === gameBoard[b] &&
-                gameBoard[a] === gameBoard[c]
-            );
-        });
+    // Check for a tie
+    if (!gameBoard.includes("")) {
+        return "Tie";
     }
+
+    return null; // No winner or tie yet
+}
+
+// Function to handle cell click
+function handleCellClick(index) {
+    if (gameBoard[index] === "" && !gameResult.textContent) {
+        gameBoard[index] = currentPlayer;
+        cells[index].textContent = currentPlayer;
+        cells[index].classList.add(currentPlayer);
+
+        const winner = checkWinner();
+        if (winner) {
+            if (winner === "Tie") {
+                displayResult("It's a Tie!");
+            } else {
+                displayResult(`${winner} wins!`);
+            }
+        } else {
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+        }
+    }
+}
+
+// Function to display the game result message
+function displayResult(result) {
+    gameResult.textContent = result;
+}
+
 // Function to reset the game
 function resetGame() {
     // Clear the game board and reset current player to "X"
     gameBoard = ["", "", "", "", "", "", "", "", ""];
     currentPlayer = "X";
 
-    // Clear the content of each cell
+    // Clear the content and styling of each cell
     cells.forEach((cell) => {
         cell.textContent = "";
+        cell.classList.remove("X", "O");
     });
 
     // Clear the game result message
     gameResult.textContent = "";
 }
 
+// Add click event listeners to each cell
+cells.forEach((cell, index) => {
+    cell.addEventListener("click", () => handleCellClick(index));
 });
