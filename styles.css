@@ -2,7 +2,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     background-color: #1a1a1a; /* Dark background color */
     color: #fff; /* White text color */
@@ -13,8 +13,124 @@ body {
     text-align: center;
 }
 
+.hidden {
+    display: none !important;
+}
+
+/* Lobby screen */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 260px;
+    margin: 0 auto 20px;
+}
+
+.form-group label {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #ccc;
+}
+
+#lobby-screen input,
+.join-row input {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #b71c1c;
+    border-radius: 4px;
+    background-color: #262626;
+    color: #fff;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.lobby-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.join-row {
+    display: flex;
+    gap: 8px;
+    max-width: 260px;
+}
+
+.join-row input {
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.error-message {
+    color: #ff8a80;
+    margin-top: 16px;
+    min-height: 20px;
+    font-size: 14px;
+}
+
+/* Room screen */
+.room-info {
+    margin-bottom: 20px;
+}
+
+.room-code-display {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+#room-code-text {
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #e53935;
+}
+
+.room-code-display button {
+    margin-left: 10px;
+    padding: 4px 10px;
+    font-size: 13px;
+}
+
+.players-row {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 10px;
+}
+
+.player-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+}
+
+.player-badge .mark {
+    font-weight: bold;
+    color: #e53935;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #777;
+    display: inline-block;
+}
+
+.dot.connected {
+    background-color: #43a047;
+}
+
+.status-line {
+    font-size: 16px;
+    color: #ccc;
+    min-height: 22px;
+}
+
 #game-board {
-    display: grid;
+    display: inline-grid;
     grid-template-columns: repeat(3, 100px);
     gap: 10px;
     border: 4px solid #e53935; /* Red border around the game board */
@@ -43,6 +159,16 @@ body {
     transform: scale(1.05); /* Scale up slightly on hover for a subtle effect */
 }
 
+.cell.disabled {
+    cursor: not-allowed;
+    opacity: 0.85;
+}
+
+.cell.disabled:hover {
+    background-color: #c62828;
+    transform: none;
+}
+
 /* Styling for the game title */
 .game-title {
     font-size: 36px;
@@ -54,6 +180,9 @@ body {
 .button-container {
     text-align: center;
     margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
 }
 
 button {
@@ -62,12 +191,18 @@ button {
     background-color: #e53935; /* Red button background color */
     color: #fff; /* White text color */
     border: none;
+    border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-button:hover {
+button:hover:not(:disabled) {
     background-color: #c62828; /* Darker red on hover */
+}
+
+button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
 }
 
 /* Styling for the game result message */

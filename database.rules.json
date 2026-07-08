@@ -1,0 +1,74 @@
+{
+  "rules": {
+    "rooms": {
+      "$roomCode": {
+        ".read": "auth != null",
+
+        "createdAt": {
+          ".write": "auth != null && !data.exists()",
+          ".validate": "newData.val() == now"
+        },
+
+        "status": {
+          ".validate": "newData.val() == 'waiting' || newData.val() == 'playing' || newData.val() == 'finished'",
+          ".write": "auth != null && ((!data.exists() && newData.val() == 'waiting') || (data.val() == 'waiting' && newData.val() == 'playing' && data.parent().child('players').child('O').exists()) || (data.val() == 'playing' && newData.val() == 'finished' && (root.child('rooms').child($roomCode).child('players').child('X').child('uid').val() == auth.uid || root.child('rooms').child($roomCode).child('players').child('O').child('uid').val() == auth.uid)) || (data.val() == 'finished' && newData.val() == 'playing' && data.parent().child('rematch').child('X').val() == true && data.parent().child('rematch').child('O').val() == true && (root.child('rooms').child($roomCode).child('players').child('X').child('uid').val() == auth.uid || root.child('rooms').child($roomCode).child('players').child('O').child('uid').val() == auth.uid)))"
+        },
+
+        "turn": {
+          ".validate": "newData.val() == 'X' || newData.val() == 'O'",
+          ".write": "auth != null && ((!data.parent().exists() && newData.val() == 'X') || (data.parent().child('status').val() == 'playing' && data.val() == 'X' && newData.val() == 'O' && root.child('rooms').child($roomCode).child('players').child('X').child('uid').val() == auth.uid) || (data.parent().child('status').val() == 'playing' && data.val() == 'O' && newData.val() == 'X' && root.child('rooms').child($roomCode).child('players').child('O').child('uid').val() == auth.uid) || (data.parent().child('status').val() == 'finished' && data.parent().child('rematch').child('X').val() == true && data.parent().child('rematch').child('O').val() == true && newData.val() != data.parent().child('startingMark').val() && (root.child('rooms').child($roomCode).child('players').child('X').child('uid').val() == auth.uid || root.child('rooms').child($roomCode).child('players').child('O').child('uid').val() == auth.uid)))"
+        },
+
+        "startingMark": {
+          ".validate": "newData.val() == 'X' || newData.val() == 'O'",
+          ".write": "auth != null && ((!data.parent().exists() && newData.val() == 'X') || (data.parent().child('status').val() == 'finished' && data.parent().child('rematch').child('X').val() == true && data.parent().child('rematch').child('O').val() == true && newData.val() != data.val() && (root.child('rooms').child($roomCode).child('players').child('X').child('uid').val() == auth.uid || root.child('rooms').child($roomCode).child('players').child('O').child('uid').val() == auth.uid)))"
+        },
+
+        "winner": {
+          ".validate": "newData.val() == null || newData.val() == 'X' || newData.val() == 'O' || newData.val() == 'Tie'",
+          ".write": "auth != null && ((data.parent().child('status').val() == 'playing' && newData.val() != null && (root.child('rooms').child($roomCode).child('players').child('X').child('uid').val() == auth.uid || root.child('rooms').child($roomCode).child('players').child('O').child('uid').val() == auth.uid)) || (newData.val() == null && data.parent().child('rematch').child('X').val() == true && data.parent().child('rematch').child('O').val() == true && (root.child('rooms').child($roomCode).child('players').child('X').child('uid').val() == auth.uid || root.child('rooms').child($roomCode).child('players').child('O').child('uid').val() == auth.uid)))"
+        },
+
+        "board": {
+          "$cellIndex": {
+            ".validate": "newData.val() == '' || newData.val() == 'X' || newData.val() == 'O'",
+            ".write": "auth != null && ((!data.parent().parent().exists() && newData.val() == '') || (data.parent().parent().child('status').val() == 'playing' && data.val() == '' && (newData.val() == 'X' || newData.val() == 'O') && data.parent().parent().child('turn').val() == newData.val() && ((newData.val() == 'X' && root.child('rooms').child($roomCode).child('players').child('X').child('uid').val() == auth.uid) || (newData.val() == 'O' && root.child('rooms').child($roomCode).child('players').child('O').child('uid').val() == auth.uid))) || (newData.val() == '' && data.parent().parent().child('status').val() == 'finished' && data.parent().parent().child('rematch').child('X').val() == true && data.parent().parent().child('rematch').child('O').val() == true && (root.child('rooms').child($roomCode).child('players').child('X').child('uid').val() == auth.uid || root.child('rooms').child($roomCode).child('players').child('O').child('uid').val() == auth.uid)))"
+          }
+        },
+
+        "players": {
+          "X": {
+            ".write": "auth != null && (!data.exists() || data.child('uid').val() == auth.uid)",
+            ".validate": "newData.hasChildren(['name', 'uid', 'connected'])",
+            "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 20" },
+            "uid": { ".validate": "newData.isString() && newData.val() == auth.uid" },
+            "connected": { ".validate": "newData.isBoolean()" },
+            "$other": { ".validate": false }
+          },
+          "O": {
+            ".write": "auth != null && (!data.exists() || data.child('uid').val() == auth.uid)",
+            ".validate": "newData.hasChildren(['name', 'uid', 'connected'])",
+            "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 20" },
+            "uid": { ".validate": "newData.isString() && newData.val() == auth.uid" },
+            "connected": { ".validate": "newData.isBoolean()" },
+            "$other": { ".validate": false }
+          },
+          "$other": { ".validate": false }
+        },
+
+        "rematch": {
+          "X": {
+            ".validate": "newData.isBoolean()",
+            ".write": "auth != null && ((newData.val() == true && root.child('rooms').child($roomCode).child('players').child('X').child('uid').val() == auth.uid && data.parent().parent().child('status').val() == 'finished') || (newData.val() == false && (root.child('rooms').child($roomCode).child('players').child('X').child('uid').val() == auth.uid || root.child('rooms').child($roomCode).child('players').child('O').child('uid').val() == auth.uid)))"
+          },
+          "O": {
+            ".validate": "newData.isBoolean()",
+            ".write": "auth != null && ((newData.val() == true && root.child('rooms').child($roomCode).child('players').child('O').child('uid').val() == auth.uid && data.parent().parent().child('status').val() == 'finished') || (newData.val() == false && (root.child('rooms').child($roomCode).child('players').child('X').child('uid').val() == auth.uid || root.child('rooms').child($roomCode).child('players').child('O').child('uid').val() == auth.uid)))"
+          }
+        },
+
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}
