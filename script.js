@@ -48,6 +48,7 @@ const playerXDot = document.getElementById("player-x-dot");
 const playerODot = document.getElementById("player-o-dot");
 const statusLine = document.getElementById("status-line");
 const cells = document.querySelectorAll(".cell");
+const CELL_NAMES = ["top left", "top middle", "top right", "middle left", "center", "middle right", "bottom left", "bottom middle", "bottom right"];
 const gameResult = document.getElementById("game-result");
 const rematchBtn = document.getElementById("rematch-btn");
 const leaveRoomBtn = document.getElementById("leave-room-btn");
@@ -305,6 +306,7 @@ function renderRoom(data) {
         cells[i].textContent = mark;
         cells[i].classList.remove("X", "O");
         if (mark) cells[i].classList.add(mark);
+        cells[i].setAttribute("aria-label", `Square ${i + 1}, ${CELL_NAMES[i]}, ${mark || "empty"}`);
     });
 
     const xPlayer = data.players?.X;
@@ -350,7 +352,9 @@ function renderRoom(data) {
 
     const canClick = data.status === "playing" && data.turn === mySeat;
     cells.forEach((cell, i) => {
-        cell.classList.toggle("disabled", !(canClick && board[i] === ""));
+        const disabled = !(canClick && board[i] === "");
+        cell.classList.toggle("disabled", disabled);
+        cell.setAttribute("aria-disabled", String(disabled));
     });
 
     // Seat X drives the rematch reset so only one client performs the write once both opt in.
