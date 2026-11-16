@@ -8,7 +8,9 @@ import {
     getDatabase,
     ref,
     get,
+    set,
     update,
+    remove,
     onValue,
     onDisconnect,
     serverTimestamp
@@ -56,6 +58,7 @@ let authReadyPromise = null;
 let roomCode = null;
 let mySeat = null; // 'X' | 'O'
 let roomUnsubscribe = null;
+let presenceUnsubscribe = null;
 let latestRoomData = null;
 
 function checkWinner(board) {
@@ -236,7 +239,7 @@ function enterRoom(code, seat) {
     url.searchParams.set("room", code);
     window.history.replaceState({}, "", url);
 
-    onDisconnect(ref(db, `rooms/${code}/players/${seat}/connected`)).set(false);
+    watchPresence(code, seat);
 
     roomCodeText.textContent = code;
     switchToRoomScreen();
@@ -257,10 +260,31 @@ function subscribeToRoom(code) {
     });
 }
 
+// Firebase reconnects on its own after a network blip, but by then onDisconnect has
+// already marked us offline. Watching .info/connected re-marks us online (and re-arms
+// onDisconnect) every time the connection comes back, not just on a page refresh.
+function watchPresence(code, seat) {
+    if (presenceUnsubscribe) presenceUnsubscribe();
+    const connectedRef = ref(db, `rooms/${code}/players/${seat}/connected`);
+    presenceUnsubscribe = onValue(ref(db, ".info/connected"), async (snapshot) => {
+        if (snapshot.val() !== true) return;
+        try {
+            await onDisconnect(connectedRef).set(false);
+            await set(connectedRef, true);
+        } catch (err) {
+            if (err.code !== "PERMISSION_DENIED") console.error("Presence update failed", err);
+        }
+    });
+}
+
 function leaveRoomLocal() {
     if (roomUnsubscribe) {
         roomUnsubscribe();
         roomUnsubscribe = null;
+    }
+    if (presenceUnsubscribe) {
+        presenceUnsubscribe();
+        presenceUnsubscribe = null;
     }
     roomCode = null;
     mySeat = null;
@@ -414,11 +438,25 @@ rematchBtn.addEventListener("click", async () => {
 
 leaveRoomBtn.addEventListener("click", async () => {
     if (roomCode && mySeat) {
+        const code = roomCode;
+        const seat = mySeat;
+        const opponentSeat = seat === "X" ? "O" : "X";
+        const opponent = latestRoomData?.players?.[opponentSeat];
+        // Stop listening first so our own delete doesn't show "This room no longer exists."
+        leaveRoomLocal();
         try {
-            await update(ref(db, `rooms/${roomCode}/players/${mySeat}`), { connected: false });
+            const connectedRef = ref(db, `rooms/${code}/players/${seat}/connected`);
+            await onDisconnect(connectedRef).cancel();
+            if (!opponent || opponent.connected === false) {
+                // Nobody else is in the room, so delete it instead of leaving it behind.
+                await remove(ref(db, `rooms/${code}`));
+            } else {
+                await set(connectedRef, false);
+            }
         } catch (err) {
             console.error(err);
         }
+        return;
     }
     leaveRoomLocal();
 });
